@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {API_ORIGIN} from '../Services/api';
 
 export default function ProductCard({product}){
 return (
 <div className="card product-card h-100">
-<img src={product.imageUrl || '/placeholder.png'} className="card-img-top" alt={product.title} />
+<img src={`${API_ORIGIN}${product.imageUrl}` || '/placeholder.png'} className="card-img-top" alt={product.title} />
 <div className="card-body d-flex flex-column">
 <h6 className="card-title">{product.title}</h6>
 <p className="mt-auto mb-1 fw-bold">{product.currency} {product.price}</p>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
-import api from '../Services/api';
+import api, {API_ORIGIN} from '../Services/api';
 
 export default function ProductPage(){
 const { slug } = useParams();
@@ -15,7 +15,7 @@ if(!product) return <div>Loading...</div>;
 return (
 <div className="row">
 <div className="col-md-6">
-<img src={product.imageUrl} alt={product.title} className="img-fluid" />
+<img src={`${API_ORIGIN}${product.imageUrl}`} alt={product.title} className="img-fluid" />
 </div>
 <div className="col-md-6">
 <h3>{product.title}</h3>

@@ -1,4 +1,5 @@
 import React from 'react';
+import api, {API_ORIGIN} from '../Services/api';
 
 export default function TrendingCarousel({items}){
 if(!items || items.length === 0) return null;
@@ -10,7 +11,7 @@ return (
 <div className="d-flex gap-3 justify-content-center">
 {group.map((p) => (
 <div className="card" style={{width: 220}} key={p.id}>
-<img src={p.imageUrl} className="card-img-top" alt={p.title} style={{height:120,objectFit:'cover'}} />
+<img src={`${API_ORIGIN}${p.imageUrl}`} className="card-img-top" alt={p.title} style={{height:120,objectFit:'cover'}} />
 <div className="card-body p-2 small">
 <div>{p.title}</div>
 <div className="fw-bold">{p.currency} {p.price}</div>
