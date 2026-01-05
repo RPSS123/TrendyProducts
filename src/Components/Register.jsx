@@ -18,7 +18,7 @@ export default function Register() {
 
   // baseURL: use env var or default to your API
   const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5286/api',
+    baseURL: process.env.REACT_APP_API_URL || 'https://localhost:7057/api',
     timeout: 10000
   });
 
@@ -44,6 +44,7 @@ export default function Register() {
       const res = await api.post('/auth/register', values);
       if (res) {
         // For prototype/demo: store token in localStorage (ok for demo)
+        localStorage.setItem('token', res.data.token);
         localStorage.setItem('user-info', JSON.stringify(res.data.user));
 
         // Redirect to home (or to profile / email verification page)

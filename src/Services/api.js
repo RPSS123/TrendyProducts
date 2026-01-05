@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_ORIGIN = process.env.REACT_APP_API_ORIGIN || 'http://localhost:5286';
+export const API_ORIGIN = process.env.REACT_APP_API_ORIGIN || 'https://localhost:7057';
 
 const api = axios.create({
     baseURL: `${API_ORIGIN}/api`,
@@ -22,5 +22,11 @@ export default {
         api.post('/cart', { userId, productId, quantity }),  // POST api/Cart
 
     getCart: (userId) =>
-        api.get('/cart', { params: { userId } })             // GET api/Cart?userId=...
+        api.get('/cart', { params: { userId } }),     // GET api/Cart?userId=...
+
+    getOrders: () => api.get("/admin/orders"),
+
+    getOrderDetails: (orderId) =>
+  api.get(`/admin/orders/${orderId}`)
+    
 };

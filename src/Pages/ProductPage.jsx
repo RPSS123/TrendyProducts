@@ -1,10 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
 import api, {API_ORIGIN} from '../Services/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductPage(){
 const { slug } = useParams();
 const [product,setProduct] = useState(null);
+const navigate = useNavigate();
+
+function Checkout() {
+        navigate('/checkout');
+    }
 
 useEffect(()=>{
 api.getProductBySlug(slug).then(r=>setProduct(r.data)).catch(e=>console.error(e));
@@ -22,7 +28,7 @@ return (
 <p className="text-muted">{product.salesCount} sold · {product.rating}⭐</p>
 <h4 className="text-success">{product.currency} {product.price}</h4>
 <p>{product.description}</p>
-<button className="btn btn-primary">Buy Now</button>
+<button className="btn btn-primary" onClick={Checkout}>Buy Now</button>
 </div>
 </div>
 );

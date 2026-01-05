@@ -37,7 +37,7 @@ function AddProducts() {
     });
 
     const api = axios.create({
-        baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5286/api',
+        baseURL: process.env.REACT_APP_API_URL || 'https://localhost:7057/api',
         timeout: 10000
     });
 

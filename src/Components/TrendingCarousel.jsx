@@ -1,7 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import api, {API_ORIGIN} from '../Services/api';
+import { useContext } from 'react';
+import { CartContext } from '../Context/CartContext';
 
 export default function TrendingCarousel({items}){
+
+    const { addToCart } = useContext(CartContext);
+
 if(!items || items.length === 0) return null;
 return (
 <div id="trendingCarousel" className="carousel slide mb-4" data-bs-ride="carousel">
@@ -15,6 +21,22 @@ return (
 <div className="card-body p-2 small">
 <div>{p.title}</div>
 <div className="fw-bold">{p.currency} {p.price}</div>
+<div className="d-flex gap-2 mt-auto">
+  <Link
+    to={`/product/${p.slug}`}
+    className="btn btn-sm btn-outline-primary w-50"
+  >
+    View
+  </Link>
+
+  <button
+    className="btn btn-sm btn-primary w-50"
+     disabled={!p?.id}
+    onClick={() => addToCart(p)}
+  >
+    Add to Cart
+  </button>
+</div>
 </div>
 </div>
 ))}

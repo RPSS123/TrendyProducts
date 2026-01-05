@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
 import ProductGrid from '../Components/ProductGrid';
+import CategoryGrid from '../Components/CategoryGrid';
 import TrendingCarousel from '../Components/TrendingCarousel';
 import { chunkArray } from '../Utils/helpers';
 import api from '../Services/api';
@@ -7,6 +9,12 @@ import api from '../Services/api';
 export default function Home(){
 const [products,setProducts] = useState([]);
 const [topTrending,setTopTrending] = useState([]);
+const [categories, setCategories] = useState([]);
+
+useEffect(() => {
+  api.getCategories().then(res => setCategories(res.data));
+}, []);
+
 
 useEffect(()=>{
 // fetch products (global) - simple sample
@@ -20,22 +28,12 @@ api.getProducts({ page:1, pageSize:12, sort:'popularity' }).then(r => setTopTren
 
 return (
 <div>
-<h3 className="mb-3">Trending Now</h3>
-<TrendingCarousel items={topTrending} />
+     <CategoryGrid categories={categories} />
 
-<div className="d-flex justify-content-between align-items-center mb-2">
-<h4>Best Selling</h4>
-<a href="#india" className="small">View India Showcase</a>
-</div>
-
-<ProductGrid products={products} />
-
-<section id="india" className="mt-5">
-<h4>India Showcase</h4>
-<p className="small text-muted">Curated picks for Indian market</p>
-{/* For demo we reuse same products */}
-<ProductGrid products={products.slice(0,8)} />
-</section>
+<section className="container my-5">
+      <h3 className="text-center mb-4">Trending Now</h3>
+      <TrendingCarousel items={topTrending} />
+    </section>
 </div>
 );
 }

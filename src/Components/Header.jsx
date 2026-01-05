@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import {CartContext} from '../Context/CartContext'
 import { Nav, NavDropdown, Alert } from 'react-bootstrap'
 import { Link, useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -10,40 +11,16 @@ export default function Header() {
     const location = useLocation();
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
-    const [cartCount, setCartCount] = useState(0);   // NEW
+    const { cart, toggleCart } = useContext(CartContext);
 
     useEffect(() => {
         setUser(JSON.parse(localStorage.getItem('user-info')));
     }, [location]);
 
-    useEffect(() => {
-        async function fetchCart() {
-            if (!user) {
-                setCartCount(0);
-                return;
-            }
-
-            try {
-                // user-id ka field jaisa aapke user-info me hai waisa use karein
-                const userId = user.id || user.userId;
-                if (!userId) return;
-
-                const res = await api.getCart(userId);
-                const items = res.data || [];
-                setCartCount(items.length);   // ya items.totalQuantity agar waise design kiya ho
-            } catch (err) {
-                console.error('Cart load error', err);
-            }
-        }
-
-        fetchCart();
-    }, [user]);
-
 
     function Logout() {
         localStorage.removeItem('user-info');   // clear nahi, ye karo
         setUser(null);
-        setCartCount(0);
         setShowAlert(true);
 
         setTimeout(() => {
@@ -88,10 +65,13 @@ export default function Header() {
                 <div className="collapse navbar-collapse" id="navMenu">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/">Trending</Link></li>
-                        <li className="nav-item"><a className="nav-link" href="#india">India Showcase</a></li>
-                        <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/register">Register</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/trending">Trending</Link></li>
+                        {!user && 
+                        (<li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>)}
+                        {!user &&
+                        (<li className="nav-item"><Link className="nav-link" to="/register">Register</Link></li>)}
+                        {user?.role === "admin" &&
+                        (<li className="nav-item"><Link className="nav-link" to="/admin/orders">Orders</Link></li>)}
                     </ul>
                     <form className="d-flex ms-auto me-3" onSubmit={handleSearch}>
                         <input
@@ -105,18 +85,18 @@ export default function Header() {
                             Search
                         </button>
                     </form>
-                    <Link
-                        to="/cart"
+                    <span
                         className="nav-link position-relative text-white me-3 p-0"
-                        style={{ fontSize: "1.4rem" }}   // size bada & vertically center
+                        style={{ fontSize: "1.4rem", cursor: "pointer" }}
+                        onClick={toggleCart}
                     >
                         🛒
-                        {cartCount > 0 && (
+                        {cart.length > 0 && (
                             <span className="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                                {cartCount}
+                                {cart.length}
                             </span>
                         )}
-                    </Link>
+                    </span>
                     {showAlert && (
                         <Alert variant="success" dismissible onClose={() => setShowAlert(false)}>
                             You have successfully logged out!
@@ -124,10 +104,11 @@ export default function Header() {
                     )}
                     {user && (
                         <Nav>
-                            <NavDropdown title={<span className="text-white">{user.name}</span>} align="end">
+                            <NavDropdown title={<span className="text-white">{user?.name}</span>} align="end">
                                 <NavDropdown.Item>Profile</NavDropdown.Item>
                                 <NavDropdown.Item>Favourite</NavDropdown.Item>
-                                <NavDropdown.Item onClick={add}>Add Product</NavDropdown.Item>
+                                {user?.role ==="admin" && 
+                                (<NavDropdown.Item onClick={add}>Add Product</NavDropdown.Item> )}
                                 <NavDropdown.Item onClick={Logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
