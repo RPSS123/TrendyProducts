@@ -21,7 +21,7 @@ function AddProducts() {
         register,
         handleSubmit,
         setValue,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
+        formState: { errors, isSubmitting},
     } = useForm({
         resolver: zodResolver(productSchema),
         defaultValues: {

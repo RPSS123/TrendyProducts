@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
-import ProductGrid from '../Components/ProductGrid';
 import CategoryGrid from '../Components/CategoryGrid';
 import TrendingCarousel from '../Components/TrendingCarousel';
 import { chunkArray } from '../Utils/helpers';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import api, {API_ORIGIN} from '../Services/api';
+import {API_ORIGIN} from '../Services/api';
 import { useContext } from 'react';
 import { CartContext } from '../Context/CartContext';
 
